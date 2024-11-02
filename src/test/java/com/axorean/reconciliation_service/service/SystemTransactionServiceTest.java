@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.axorean.reconciliation_service.model.TransactionType.CREDIT;
 import static com.axorean.reconciliation_service.model.TransactionType.DEBIT;
+import static com.axorean.reconciliation_service.util.Constant.DATE_FORMAT;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +30,7 @@ class SystemTransactionServiceTest {
         ReconciliationRequest reconciliationRequest = ReconciliationRequest.builder()
                 .systemTransactionPath(systemTransactionPath)
                 .build();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
         Date dateTransaction1 = simpleDateFormat.parse("2024-07-12 09:30:40");
         Date dateTransaction2 = simpleDateFormat.parse("2024-07-12 19:30:40");
         Date dateTransaction3 = simpleDateFormat.parse("2024-07-12 21:30:40");
