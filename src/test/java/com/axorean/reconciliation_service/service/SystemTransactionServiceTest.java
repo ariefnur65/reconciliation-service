@@ -46,7 +46,7 @@ class SystemTransactionServiceTest {
     }
 
     @Test
-    void readSystemTransactionFile_shouldThrowSystemTransactionFileInvalidException_whenReadFileSystemTrx002Csv() throws ParseException, SystemTransactionFileInvalidException {
+    void readSystemTransactionFile_shouldThrowSystemTransactionFileInvalidException_whenReadFileSystemTrx002Csv() {
         String systemTransactionPath = "src/test/resources/SystemRrx002.csv";
         ReconciliationRequest reconciliationRequest = ReconciliationRequest.builder()
                 .systemTransactionPath(systemTransactionPath)
