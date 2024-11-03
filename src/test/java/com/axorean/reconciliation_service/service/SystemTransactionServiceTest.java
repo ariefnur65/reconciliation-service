@@ -1,5 +1,6 @@
 package com.axorean.reconciliation_service.service;
 
+import com.axorean.reconciliation_service.exception.SystemTransactionFileInvalidException;
 import com.axorean.reconciliation_service.model.SystemTransaction;
 import com.axorean.reconciliation_service.model.dto.ReconciliationRequest;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class SystemTransactionServiceTest {
     private SystemTransactionService systemTransactionService;
 
     @Test
-    void readSystemTransactionFile_shouldReturn3DataTransaction_whenReadFileSystemTrx001Csv() throws ParseException {
+    void readSystemTransactionFile_shouldReturn3DataTransaction_whenReadFileSystemTrx001Csv() throws ParseException, SystemTransactionFileInvalidException {
         String systemTransactionPath = "src/test/resources/SystemRrx001.csv";
         ReconciliationRequest reconciliationRequest = ReconciliationRequest.builder()
                 .systemTransactionPath(systemTransactionPath)
@@ -42,5 +43,15 @@ class SystemTransactionServiceTest {
         List<SystemTransaction> result = this.systemTransactionService.readSystemTransactionFile(reconciliationRequest);
 
         assertArrayEquals(expectedTransactions.toArray(), result.toArray());
+    }
+
+    @Test
+    void readSystemTransactionFile_shouldThrowSystemTransactionFileInvalidException_whenReadFileSystemTrx002Csv() throws ParseException, SystemTransactionFileInvalidException {
+        String systemTransactionPath = "src/test/resources/SystemRrx002.csv";
+        ReconciliationRequest reconciliationRequest = ReconciliationRequest.builder()
+                .systemTransactionPath(systemTransactionPath)
+                .build();
+
+        assertThrows(SystemTransactionFileInvalidException.class, () -> this.systemTransactionService.readSystemTransactionFile(reconciliationRequest));
     }
 }

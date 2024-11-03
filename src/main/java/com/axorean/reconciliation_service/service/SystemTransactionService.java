@@ -1,5 +1,6 @@
 package com.axorean.reconciliation_service.service;
 
+import com.axorean.reconciliation_service.exception.SystemTransactionFileInvalidException;
 import com.axorean.reconciliation_service.model.SystemTransaction;
 import com.axorean.reconciliation_service.model.TransactionType;
 import com.axorean.reconciliation_service.model.dto.ReconciliationRequest;
@@ -21,7 +22,7 @@ import static com.axorean.reconciliation_service.util.Constant.DATE_FORMAT;
 @RequiredArgsConstructor
 public class SystemTransactionService {
 
-    public List<SystemTransaction> readSystemTransactionFile(ReconciliationRequest request) {
+    public List<SystemTransaction> readSystemTransactionFile(ReconciliationRequest request) throws SystemTransactionFileInvalidException {
         Path path = Path.of(request.getSystemTransactionPath());
         File file = path.toFile();
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -42,7 +43,8 @@ public class SystemTransactionService {
             }
 
         } catch (Exception ex) {
-
+            String message = String.format("Failed to read system transaction file due to invalid format with exception: %s", ex.getMessage());
+            throw new SystemTransactionFileInvalidException(message, ex);
         }
         return transactions;
     }
