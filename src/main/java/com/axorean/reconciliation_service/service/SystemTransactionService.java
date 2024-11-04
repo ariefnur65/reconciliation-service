@@ -22,9 +22,13 @@ import static com.axorean.reconciliation_service.util.Constant.DATE_FORMAT;
 @RequiredArgsConstructor
 public class SystemTransactionService {
 
-    public List<SystemTransaction> readSystemTransactionFile(ReconciliationRequest request) throws SystemTransactionFileInvalidException {
+    public List<SystemTransaction> readSystemTransactionFile(ReconciliationRequest request) throws SystemTransactionFileInvalidException, FileNotFoundException {
         Path path = Path.of(request.getSystemTransactionPath());
         File file = path.toFile();
+        if (!file.exists()) {
+            String errorMessage = String.format("System transaction file %s does not exist", request.getSystemTransactionPath());
+            throw new FileNotFoundException(errorMessage);
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         List<SystemTransaction> transactions = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {

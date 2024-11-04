@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -26,7 +27,7 @@ class SystemTransactionServiceTest {
     private SystemTransactionService systemTransactionService;
 
     @Test
-    void readSystemTransactionFile_shouldReturn3DataTransaction_whenReadFileSystemTrx001Csv() throws ParseException, SystemTransactionFileInvalidException {
+    void readSystemTransactionFile_shouldReturn3DataTransaction_whenReadFileSystemTrx001Csv() throws ParseException, SystemTransactionFileInvalidException, FileNotFoundException {
         String systemTransactionPath = "src/test/resources/SystemRrx001.csv";
         ReconciliationRequest reconciliationRequest = ReconciliationRequest.builder()
                 .systemTransactionPath(systemTransactionPath)
@@ -53,5 +54,15 @@ class SystemTransactionServiceTest {
                 .build();
 
         assertThrows(SystemTransactionFileInvalidException.class, () -> this.systemTransactionService.readSystemTransactionFile(reconciliationRequest));
+    }
+
+    @Test
+    void readSystemTransactionFile_shouldThrowFileNotFoundException_whenReadFileSystemTrx003Csv() {
+        String systemTransactionPath = "src/test/resources/SystemRrx003.csv";
+        ReconciliationRequest reconciliationRequest = ReconciliationRequest.builder()
+                .systemTransactionPath(systemTransactionPath)
+                .build();
+
+        assertThrows(FileNotFoundException.class, () -> this.systemTransactionService.readSystemTransactionFile(reconciliationRequest));
     }
 }
