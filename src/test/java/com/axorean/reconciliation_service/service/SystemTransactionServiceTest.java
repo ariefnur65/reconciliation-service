@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +17,8 @@ import java.util.List;
 import static com.axorean.reconciliation_service.model.TransactionType.CREDIT;
 import static com.axorean.reconciliation_service.model.TransactionType.DEBIT;
 import static com.axorean.reconciliation_service.util.Constant.DATE_FORMAT;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class SystemTransactionServiceTest {
