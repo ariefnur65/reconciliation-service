@@ -1,5 +1,6 @@
 package com.axorean.reconciliation_service.service;
 
+import com.axorean.reconciliation_service.exception.BankStatementFileInvalidException;
 import com.axorean.reconciliation_service.exception.SystemTransactionFileInvalidException;
 import com.axorean.reconciliation_service.model.BankStatement;
 import com.axorean.reconciliation_service.model.BankStatements;
@@ -25,7 +26,7 @@ import static com.axorean.reconciliation_service.util.Constant.DATE_FORMAT;
 @Service
 @RequiredArgsConstructor
 public class BankStatementService {
-    public BankStatements readBankStatementFile(String bankStatementPathFile) throws FileNotFoundException {
+    public BankStatements readBankStatementFile(String bankStatementPathFile) throws FileNotFoundException, BankStatementFileInvalidException {
         List<BankStatement> bankStatements = new ArrayList<>();
         Path path = Path.of(bankStatementPathFile);
         File file = path.toFile();
@@ -46,8 +47,9 @@ public class BankStatementService {
                         transactionDate);
                 bankStatements.add(bankStatement);
             }
-        } catch (Exception ex) {
-
+        } catch (Exception exception) {
+            String errorMessage = String.format("Error while reading file bank statement with path %s", bankStatementPathFile);
+            throw new BankStatementFileInvalidException(errorMessage, exception);
         }
         return new BankStatements(bankStatementPathFile, bankStatements);
     }

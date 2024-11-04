@@ -1,5 +1,6 @@
 package com.axorean.reconciliation_service.service;
 
+import com.axorean.reconciliation_service.exception.BankStatementFileInvalidException;
 import com.axorean.reconciliation_service.model.BankStatement;
 import com.axorean.reconciliation_service.model.BankStatements;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class BankStatementServiceTest {
     private BankStatementService bankStatementService;
 
     @Test
-    void readBankStatementFile_shouldReturnBankStatementsThatContain5BankStatement_whenReadFileBankStatementSMBI() throws ParseException, FileNotFoundException {
+    void readBankStatementFile_shouldReturnBankStatementsThatContain5BankStatement_whenReadFileBankStatementSMBI() throws ParseException, FileNotFoundException, BankStatementFileInvalidException {
         String bankStatementPathFile = "src/test/resources/BankStatementSMBI.csv";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
         Date transactionDate = simpleDateFormat.parse("2024-07-12 09:30:40");
@@ -46,5 +47,12 @@ class BankStatementServiceTest {
         String bankStatementPathFile = "src/test/resources/BankStatementSMBC.csv";
 
         assertThrows(FileNotFoundException.class, () -> this.bankStatementService.readBankStatementFile(bankStatementPathFile));
+    }
+
+    @Test
+    void readBankStatementFile_shouldThrowBankStatementFIleInvalidException_whenReadFileBankStatementSMBP() {
+        String bankStatementPathFile = "src/test/resources/BankStatementSMBP.csv";
+
+        assertThrows(BankStatementFileInvalidException.class, () -> this.bankStatementService.readBankStatementFile(bankStatementPathFile));
     }
 }
