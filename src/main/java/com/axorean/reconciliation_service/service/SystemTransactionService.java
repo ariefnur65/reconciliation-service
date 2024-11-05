@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.axorean.reconciliation_service.util.Constant.COMMA_DELIMITER;
 import static com.axorean.reconciliation_service.util.Constant.DATE_FORMAT;
@@ -39,6 +37,9 @@ public class SystemTransactionService {
                 Double amount = Double.parseDouble(values[1]);
                 TransactionType transactionType = TransactionType.valueOf(values[2]);
                 Date transactionDate = dateFormat.parse(values[3]);
+                if (request.getStartDate().after(transactionDate) || request.getEndDate().before(transactionDate)) {
+                    continue;
+                }
                 SystemTransaction transaction = new SystemTransaction(trxId,
                         amount,
                         transactionType,
