@@ -24,7 +24,7 @@ public class ReconciliationService {
     public ReconciliationResponse reconcileData(ReconciliationRequest request) throws ExecutionException, InterruptedException {
         try {
             Date startDate = this.setStarterDate(request.getStartDate());
-            Date endDate = this.setEndDate(request.getStartDate());
+            Date endDate = this.setEndDate(request.getEndDate());
             request.setStartDate(startDate);
             request.setEndDate(endDate);
             Future<List<SystemTransaction>> readSystemTransactionFile = this.executorService.submit(() -> this.systemTransactionService.readSystemTransactionFile(request));
