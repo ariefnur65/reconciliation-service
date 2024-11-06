@@ -6,12 +6,17 @@ Java Springboot is a webservice to reconcile system transaction with bank statem
 Prerequisite to run the program:
 
 - JDK Java 21
-- Maven installed
 
 ## Run the webserver on a local machine
 By default will start on port 8080
+1. checkout to the repository
+2. run the following command for bash on windows
 ```bash
- mvn spring-boot:run
+ mvnw spring-boot:run
+```
+3. if you use command windows please use this
+```bash
+ ./mvnw spring-boot:run
 ```
 
 ## Usage
