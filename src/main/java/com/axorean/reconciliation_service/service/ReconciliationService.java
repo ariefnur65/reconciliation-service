@@ -44,23 +44,27 @@ public class ReconciliationService {
                 bankStatementsList.add(bankStatements);
             }
             long transactionMatch = 0;
-            for (SystemTransaction systemTransaction : listSystemTransaction) {
-                boolean isFound = findInBankStatementList(systemTransaction, bankStatementsList, listSystemTransaction);
+            Iterator<SystemTransaction> systemTransactionIterator = listSystemTransaction.iterator();
+            while (systemTransactionIterator.hasNext()) {
+                SystemTransaction systemTransaction = systemTransactionIterator.next();
+                boolean isFound = findInBankStatementList(systemTransaction, bankStatementsList, systemTransactionIterator);
                 if (isFound) {
                     transactionMatch++;
                 }
             }
             long totalMisMatchedTransactions = totalInitialTransaction - transactionMatch * 2;
-            long totalTransaction = totalInitialTransaction + totalMisMatchedTransactions;
+            long totalTransaction = transactionMatch + totalMisMatchedTransactions;
             double totalDiscrepancy = 0;
             if (!listSystemTransaction.isEmpty()) {
                 totalDiscrepancy = listSystemTransaction.stream()
                         .reduce((double) 0, (partialAmountResult, systemTransaction) -> partialAmountResult + systemTransaction.amount(), Double::sum);
             }
-            for (BankStatements bankStatements : bankStatementsList) {
+            Iterator<BankStatements> bankStatementsIterator = bankStatementsList.iterator();
+            while (bankStatementsIterator.hasNext()) {
+                BankStatements bankStatements = bankStatementsIterator.next();
                 List<BankStatement> bankStatementList = bankStatements.statements();
                 if (bankStatementList.isEmpty()) {
-                    bankStatementsList.remove(bankStatements);
+                    bankStatementsIterator.remove();
                     continue;
                 }
                 totalDiscrepancy += bankStatementList.stream()
@@ -81,10 +85,10 @@ public class ReconciliationService {
         }
     }
 
-    private static boolean findInBankStatementList(SystemTransaction systemTransaction, List<BankStatements> bankStatementsList, List<SystemTransaction> listSystemTransaction) {
+    private static boolean findInBankStatementList(SystemTransaction systemTransaction, List<BankStatements> bankStatementsList, Iterator<SystemTransaction> iteratorSystemTransaction) {
         for (BankStatements bankStatements : bankStatementsList) {
-            List<BankStatement> statements = bankStatements.statements();
-            boolean isFound = findBankStatement(systemTransaction, statements, listSystemTransaction);
+            Iterator<BankStatement> bankStatementIterator = bankStatements.statements().iterator();
+            boolean isFound = findBankStatement(systemTransaction, bankStatementIterator, iteratorSystemTransaction);
             if (isFound) {
                 return true;
             }
@@ -92,13 +96,14 @@ public class ReconciliationService {
         return false;
     }
 
-    private static boolean findBankStatement(SystemTransaction systemTransaction, List<BankStatement> statements, List<SystemTransaction> listSystemTransaction) {
-        for (BankStatement statement : statements) {
+    private static boolean findBankStatement(SystemTransaction systemTransaction, Iterator<BankStatement> iteratorStatement, Iterator<SystemTransaction> iteratorSystemTransaction) {
+        while (iteratorStatement.hasNext()) {
+            BankStatement statement = iteratorStatement.next();
             boolean isAmountEqual = Objects.equals(statement.amount(), systemTransaction.amount());
             boolean isTransactionTimeEquals = Objects.equals(systemTransaction.transactionTime(), statement.date());
             if (isAmountEqual && isTransactionTimeEquals) {
-                listSystemTransaction.remove(systemTransaction);
-                statements.remove(statement);
+                iteratorStatement.remove();
+                iteratorSystemTransaction.remove();
                 return true;
             }
         }
