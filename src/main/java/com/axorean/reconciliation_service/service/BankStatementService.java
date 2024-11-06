@@ -26,7 +26,7 @@ import static com.axorean.reconciliation_service.util.Constant.DATE_FORMAT;
 @Service
 @RequiredArgsConstructor
 public class BankStatementService {
-    public BankStatements readBankStatementFile(String bankStatementPathFile) throws FileNotFoundException, BankStatementFileInvalidException {
+    public BankStatements readBankStatementFile(String bankStatementPathFile, ReconciliationRequest request) throws FileNotFoundException, BankStatementFileInvalidException {
         List<BankStatement> bankStatements = new ArrayList<>();
         Path path = Path.of(bankStatementPathFile);
         File file = path.toFile();
@@ -42,6 +42,9 @@ public class BankStatementService {
                 String trxId = values[0];
                 Double amount = Double.parseDouble(values[1]);
                 Date transactionDate = simpleDateFormat.parse(values[2]);
+                if (request.getStartDate().after(transactionDate) || request.getEndDate().before(transactionDate)) {
+                    continue;
+                }
                 BankStatement bankStatement = new BankStatement(trxId,
                         amount,
                         transactionDate);
