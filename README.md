@@ -31,6 +31,7 @@ There ara one REST API that is `http://localhost:8080/reconcile-data` with POST 
 }
 ```
 Payload content consist of followiing fields:
+
 - `bankStatements`: list of path of bank statements csv file
 - `systemTransactionPath` : path of system transaction csv file
 - `startDate` : start date range of the data to be reconciled
@@ -38,18 +39,21 @@ Payload content consist of followiing fields:
 
 ### System Transaction CSV Format
 ```[trxId],[amount],[transactionTYpe],[transactionDate]```
-format of system transaction csv has 4 fields:
+
+Format of system transaction csv has 4 fields:
 - trxId : transaction id in the system
 - amount : amount in the transaction
 - transactionType : transaction type in the transaction can be CREDIT or DEBIT
 - transactionDate : transaction date in the transaction it has format `yyyy-MM-dd HH:mm:ss` e.g. `2024-07-27 21:30:40`
 
 Example:
+
 ```125,454,CREDIT,2024-07-12 21:30:40```
 
 ### Bank Statement CSV Format
 ```[trxId],[amount],[transactionDate]```
-format of bank statement csv has 3 fields:
+
+Format of bank statement csv has 3 fields:
 - trxId : statement id in the system
 - amount : amount in the statement can be negative if debit
 - transactionDate : transaction date in the statement it has format `yyyy-MM-dd HH:mm:ss` e.g. `2024-07-27 21:30:40`
