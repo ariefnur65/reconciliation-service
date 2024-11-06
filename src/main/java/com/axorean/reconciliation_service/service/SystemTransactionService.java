@@ -35,8 +35,9 @@ public class SystemTransactionService {
                 String[] values = line.split(COMMA_DELIMITER);
                 String trxId = values[0];
                 Double amount = Double.parseDouble(values[1]);
-                TransactionType transactionType = TransactionType.valueOf(values[2]);
                 Date transactionDate = dateFormat.parse(values[3]);
+                TransactionType transactionType = TransactionType.valueOf(values[2]);
+                amount = transactionType == TransactionType.DEBIT ? amount * -1: amount;
                 if (request.getStartDate().after(transactionDate) || request.getEndDate().before(transactionDate)) {
                     continue;
                 }
