@@ -1,6 +1,5 @@
 package com.axorean.reconciliation_service.service;
 
-import com.axorean.reconciliation_service.exception.SystemTransactionFileInvalidException;
 import com.axorean.reconciliation_service.model.BankStatement;
 import com.axorean.reconciliation_service.model.BankStatements;
 import com.axorean.reconciliation_service.model.DetailMismatchedTransaction;
@@ -10,7 +9,6 @@ import com.axorean.reconciliation_service.model.dto.ReconciliationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
