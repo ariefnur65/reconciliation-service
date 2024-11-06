@@ -41,9 +41,9 @@ class SystemTransactionServiceTest {
         Date dateTransaction2 = simpleDateFormat.parse("2024-07-12 19:30:40");
         Date dateTransaction3 = simpleDateFormat.parse("2024-07-12 21:30:40");
         SystemTransaction systemTransaction1 = new SystemTransaction("123", 4565.4, CREDIT, dateTransaction1);
-        SystemTransaction systemTransaction2 = new SystemTransaction("124", 455.4, DEBIT, dateTransaction2);
+        SystemTransaction systemTransaction2MinusResult = new SystemTransaction("124", -455.4, DEBIT, dateTransaction2);
         SystemTransaction systemTransaction3 = new SystemTransaction("125", 454.0, CREDIT, dateTransaction3);
-        List<SystemTransaction> expectedTransactions = Arrays.asList(systemTransaction1, systemTransaction2, systemTransaction3);
+        List<SystemTransaction> expectedTransactions = Arrays.asList(systemTransaction1, systemTransaction2MinusResult, systemTransaction3);
 
         List<SystemTransaction> result = this.systemTransactionService.readSystemTransactionFile(reconciliationRequest);
 
